@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+  dataapi:
+    build: data_api/
+    env_file:
+      - /home/cloud-service/data_api/.env
+    command: python web_app.py
+    expose:
+      - '5000'
+    ports:
+      - 5000:5000
+    networks:
+      - weathernet
+    depends_on:
+      - localrabbit
+  weatherapi:
+    build: weather_api/
+    restart: unless-stopped
+    env_file:
+      - /home/cloud-service/weather_api/config/.env
+    command: python -u weather_api.py
+    networks:
+      - weathernet
+    depends_on:
+      - localrabbit
+      - localredis
+  viewapi:
+    build: view_api/
+    env_file:
+      - /home/cloud-service/view_api/.env
+    command: /usr/bin/supervisord
+    networks:
+      - weathernet
+    ports:
+      - 8888:8080
+      - 8089:80
+    depends_on:
+      - localrabbit
+      - localdb
+  localrabbit:
+    image: rabbitmq:management
+    hostname: rabbithost
+    networks:
+      - weathernet
+    ports:
+      - 3000:15672
+  localdb:
+    image: mysql
+    hostname: dbhost
+    networks:
+      - weathernet
+    environment:
+      MYSQL_DATABASE: weather_db
+      MYSQL_ROOT_PASSWORD: supersecret
+  localredis:
+    image: redis
+    hostname: localredis
+    networks:
+      - weathernet
+
+networks:
+  weathernet:
+    driver: bridge
