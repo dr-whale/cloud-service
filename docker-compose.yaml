@@ -40,8 +40,6 @@ services:
     depends_on:
       - localrabbit
       - localdb
-    environment:
-      - PHP_EXTRA_CONFIGURE_ARGS --enable-fpm --with-fpm-user=root --with-fpm-group=root
   localrabbit:
     image: rabbitmq:management
     hostname: rabbithost

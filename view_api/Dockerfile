@@ -10,7 +10,9 @@ RUN docker-php-ext-install pdo pdo_mysql sockets
 COPY /etcconf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY /etcconf/nginx.conf /etc/nginx/conf.d/default.conf
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
-    sed -i "s/user www-data;/user root;/" /etc/nginx/nginx.conf
+    sed -i "s/user www-data;/user root;/" /etc/nginx/nginx.conf \
+    sed -i "s/user = www-data/user = root/" /etc/php/8.1/fpm/pool.d/www.conf && \
+    sed -i "s/group = www-data/group = root/" /etc/php/8.1/fpm/pool.d/www.conf
 
 COPY . .
 
