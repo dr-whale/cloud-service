@@ -9,11 +9,10 @@ RUN mkdir -p /var/log/supervisor
 RUN docker-php-ext-install pdo pdo_mysql sockets
 COPY /etcconf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY /etcconf/nginx.conf /etc/nginx/conf.d/default.conf
+COPY /etcconf/www.conf /usr/local/etc/php-fpm.d/www.conf
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
     sed -i "s/user www-data;/user root;/" /etc/nginx/nginx.conf 
-    #sed -i "s/user = www-data/user = root/" /usr/local/etc/php-fpm.d/www.conf && \
-    #sed -i "s/group = www-data/group = root/" /usr/local/etc/php-fpm.d/www.conf
-
+    
 COPY . .
 
 RUN composer install
