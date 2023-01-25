@@ -4,9 +4,6 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-RUN chown -R :www-data /app/web/assets
-RUN chmod -R ug+rw /app/web/assets
-
 RUN apt-get update && apt-get install -y supervisor nginx nano mc htop
 RUN mkdir -p /var/log/supervisor
 RUN docker-php-ext-install pdo pdo_mysql sockets
@@ -19,3 +16,6 @@ RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
 COPY . .
 
 RUN composer install
+
+RUN chown -R :www-data /app/web/assets
+RUN chmod -R ug+rw /app/web/assets
