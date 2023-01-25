@@ -4,9 +4,9 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y supervisor nginx nano mc htop php-gd
+RUN apt-get update && apt-get install -y supervisor nginx nano mc htop libpng-dev
 RUN mkdir -p /var/log/supervisor
-RUN docker-php-ext-install pdo pdo_mysql sockets
+RUN docker-php-ext-install pdo pdo_mysql sockets gd
 COPY /etcconf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY /etcconf/nginx.conf /etc/nginx/conf.d/default.conf
 #COPY /etcconf/www.conf /usr/local/etc/php-fpm.d/www.conf
