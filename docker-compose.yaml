@@ -4,7 +4,8 @@ services:
   dataapi:
     build: data_api/
     env_file:
-      - /home/cloud-service/data_api/.env
+      - ./data_api/.env
+      #- /home/cloud-service/data_api/.env
       #- /home/whale/cloud_service/data_api/.env
     command: python web_app.py
     expose:
@@ -19,7 +20,8 @@ services:
     build: weather_api/
     restart: unless-stopped
     env_file:
-      - /home/cloud-service/weather_api/config/.env
+      - ./weather_api/config/.env
+      #- /home/cloud-service/weather_api/config/.env
       #- /home/whale/cloud_service/weather_api/config/.env
     command: python -u weather_api.py
     networks:
@@ -28,9 +30,14 @@ services:
       - localrabbit
       - localredis
   viewapi:
-    build: view_api/
+    build:
+      context: ./view_api
+      dockerfile: Dockerfile
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
     env_file:
-      - /home/cloud-service/view_api/.env
+      - ./view_api/.env
+      #- /home/cloud-service/view_api/.env
       #- /home/whale/cloud_service/view_api/.env
     command: /usr/bin/supervisord
     networks:
@@ -53,8 +60,8 @@ services:
     networks:
       - weathernet
     environment:
-      MYSQL_DATABASE: weather_db
-      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
   localredis:
     image: redis
     hostname: localredis

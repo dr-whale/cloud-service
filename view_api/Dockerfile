@@ -4,6 +4,8 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
+ARG DOMAIN_NAME=localhost
+
 RUN apt-get update && apt-get install -y supervisor nginx nano mc htop libmagickwand-dev
 RUN mkdir -p /var/log/supervisor
 RUN docker-php-ext-install pdo pdo_mysql sockets
@@ -12,9 +14,9 @@ RUN mkdir -p /usr/src/php/ext/imagick; \
     docker-php-ext-install imagick;
 COPY /etcconf/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY /etcconf/nginx.conf /etc/nginx/conf.d/default.conf
-#COPY /etcconf/www.conf /usr/local/etc/php-fpm.d/www.conf
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf && \
-    sed -i "s/user www-data;/user root;/" /etc/nginx/nginx.conf 
+    sed -i "s/user www-data;/user root;/" /etc/nginx/nginx.conf && \
+    sed -i "s/server_name _;/server_name ${DOMAIN_NAME};/" /etc/nginx/conf.d/default.conf
     
 COPY . .
 
