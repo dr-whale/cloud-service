@@ -1,7 +1,7 @@
 from .class_description import Singleton
 from .redis_client import RedisClient
 
-class CacheManager(Singleton):
+class CacheManager(metaclass=Singleton):
     def cache_driver(self):
         return RedisClient()
     

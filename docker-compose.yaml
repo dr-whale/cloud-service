@@ -4,9 +4,7 @@ services:
   dataapi:
     build: data_api/
     env_file:
-      - ./data_api/.env
-      #- /home/cloud-service/data_api/.env
-      #- /home/whale/cloud_service/data_api/.env
+      - ./data_api/config/.env
     command: python web_app.py
     expose:
       - '5000'
@@ -14,6 +12,8 @@ services:
       - 5000:5000
     networks:
       - weathernet
+    volumes:
+      - ./logs/data_api_logs:/app/logs
     depends_on:
       - localrabbit
   weatherapi:
@@ -21,11 +21,11 @@ services:
     restart: unless-stopped
     env_file:
       - ./weather_api/config/.env
-      #- /home/cloud-service/weather_api/config/.env
-      #- /home/whale/cloud_service/weather_api/config/.env
     command: python -u weather_api.py
     networks:
       - weathernet
+    volumes:
+      - ./logs/weather_api_logs:/app/logs
     depends_on:
       - localrabbit
       - localredis
@@ -37,11 +37,11 @@ services:
         DOMAIN_NAME: ${DOMAIN_NAME}
     env_file:
       - ./view_api/.env
-      #- /home/cloud-service/view_api/.env
-      #- /home/whale/cloud_service/view_api/.env
     command: /usr/bin/supervisord
     networks:
       - weathernet
+    volumes:
+      - ./logs/view_api_logs:/app/logs
     ports:
       - 8080:80
     depends_on:

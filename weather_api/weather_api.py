@@ -1,5 +1,5 @@
 from src.yandex import Client, ClientError, InvalidMethodError, BadConfigError, InvalidArgumentError
-from src.lib import CacheManager
+from src.lib import CacheManager, Log
 from config import config
 from datetime import datetime
 import pika, json
@@ -13,18 +13,23 @@ def error_decorator(func):
         except InvalidArgumentError as exp:
             code = 404
             message = str(exp)
+            Log().error('InvalidArgumentError',exc_info=True)
         except BadConfigError as exp:
             code = 403
             message = str(exp)
+            Log().error('BadConfigError',exc_info=True)
         except InvalidMethodError as exp:
             code = 412
             message = str(exp)
+            Log().error('InvalidMethodError',exc_info=True)
         except ClientError as exp:
             code = 400
             message = str(exp)
+            Log().error('ClientError',exc_info=True)
         except Exception as exp:
             code = 500
             message = str(exp)
+            Log().error('General Exception',exc_info=True)
         #return json.dumps({"status": "error", "message": message, "code": code})
         print(message)
     test_wrapper.__name__ = func.__name__
@@ -49,13 +54,13 @@ def weather_send(date):
         CacheManager().remember(date, weather)
     channel.queue_declare(queue = 'weather', durable = True)
     channel.basic_publish(exchange = '', routing_key = 'weather', body = weather)
+    Log().info('Weather send to Rabbit')
     print('Weather send')
 
-print('Connection')    
+
 connection = pika.BlockingConnection(pika.ConnectionParameters(config.RABBIT_HOST))
-print('Channel')
+Log().info("Connection to Rabbit Success")
 channel = connection.channel()
-print('Queue')
 channel.queue_declare(queue = 'date', durable = True)
 
 def callback(ch, method, properties, body):

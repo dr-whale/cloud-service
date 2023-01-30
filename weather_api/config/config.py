@@ -11,3 +11,5 @@ DATA_URL = os.environ.get("DATA_URL") or '/informers'
 PARAMS = os.environ.get("PARAMS") or {'lat': '59.9386', 'lon': '30.3141'}
 RABBIT_HOST = os.environ.get("RABBIT_HOST") or 'localhost'
 REDIS_HOST = os.environ.get("REDIS_HOST") or 'localhost'
+LOGGER_LEVEL = os.environ.get("LOGGER_LEVEL") or "INFO"
+LOGGER_FILE_PATH = os.environ.get("LOGGER_FILE_PATH") or "default_log.log"

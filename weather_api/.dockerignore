@@ -3,3 +3,4 @@ __pychache__
 /config/.env
 /src/lib/__pychache__
 /src/yandex/__pychache__
+logs

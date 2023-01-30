@@ -5,9 +5,6 @@ return [
     'dsn' => 'mysql:host='.env('DB_HOST', 'localhost').';dbname='.env('DB_NAME'),
     'username' => env('DB_USER', 'root'),
     'password' => env('DB_PASSWORD', 'mynewpassword'),
-    //'dsn' => 'mysql:host=localhost;dbname=weather_db',
-    //'username' => 'root',
-    //'password' => 'mynewpassword',
     'charset' => 'utf8',
 
     // Schema cache options (for production environment)

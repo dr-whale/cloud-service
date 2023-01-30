@@ -1,4 +1,5 @@
 .env
+logs
 
 /data_api/__pycache__
 /data_api/.env

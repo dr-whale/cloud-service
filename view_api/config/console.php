@@ -18,10 +18,14 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'log' => [
+            'flushInterval' => 1,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error', 'warning', 'info'],
+                    'exportInterval' => 1,
+                    'logVars' => ['_GET', '_POST'],
+                    'logFile' => 'logs/console.log'
                 ],
             ],
         ],

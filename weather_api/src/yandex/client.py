@@ -1,7 +1,7 @@
 import requests
-from .errors import InvalidMethodError
-from .errors import BadConfigError
-from .errors import InvalidArgumentError
+from .errors import InvalidMethodError, BadConfigError, InvalidArgumentError
+from src.lib import Log
+
 
 class Client():
     def __init__(self, url, key):
@@ -16,8 +16,10 @@ class Client():
         headers_req = {'X-Yandex-API-Key':self.api_key}
         if method_req == 'get':
             response = requests.get(url = f"{self.api_url}{address_req}", params = params_req, headers = headers_req)
+            Log().info('GET Request to Yandex')
         elif method_req == 'post':
             response = requests.post(url = f"{self.api_url}{address_req}", params = params_req, data = body_req, headers = headers_req)
+            Log().info('POST Request to Yandex')
         else:
             raise InvalidMethodError('Invalid Method Error')
         response.raise_for_status()

@@ -3,7 +3,7 @@ from .class_description import Singleton
 from config import config
 
 
-class RedisClient(Singleton):
+class RedisClient(metaclass=Singleton):
     def __init__(self):
         self.client = redis.Redis(host=config.REDIS_HOST)
 

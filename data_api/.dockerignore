@@ -1,2 +1,5 @@
 __pycache__
-.env
+config/.env
+config/__pycache__
+logs
+env

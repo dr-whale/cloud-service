@@ -6,6 +6,8 @@ use app\models\Weather;
 use Enqueue\AmqpLib\AmqpConnectionFactory;
 use Interop\Amqp\AmqpQueue;
 use yii\console\Controller;
+use yii\helpers\VarDumper;
+use Yii;
 
 class WorkerController extends Controller
 {
@@ -50,6 +52,7 @@ class WorkerController extends Controller
 
     public function actionRun()
     {
+        Yii::info('worker run command', __METHOD__);
         $this->rabbitConnect();
         try {
             while (true) {
@@ -65,6 +68,7 @@ class WorkerController extends Controller
                 }
             }
         } catch (\Exception $e) {
+            Yii::error($e, __METHOD__);
             echo $e->getMessage();
         }
         $this->rabbitDisconnect();
